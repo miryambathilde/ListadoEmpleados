@@ -1,1 +1,17 @@
-<p>numero-empleados works!</p>
+<div class="card">
+  <div class="card-body">
+    <div class="form-check form-check-inline">
+      <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos">
+      <label class="form-check-label" for="todos">Todos</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino">
+      <label class="form-check-label" for="femenino">Femenino</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino">
+      <label class="form-check-label" for="masculino">Masculino</label>
+    </div>
+  </div>
+</div>
