@@ -23,4 +23,22 @@ export class EmpleadoListComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /* metodo para obtener el total de empleados que nos devuelve un number, y le decimos que devuelva la longitud de numeros del array de listEmpleados  */
+  obtenerTotalEmpleados(): number {
+    return this.listEmpleados.length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada por sexo
+  y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Femenino + el numero de empleados femeninos  */
+  obtenerTotalFemeninos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Femenino').length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINPOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada
+  por sexo y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Masculino + el numero de empleados femeninos  */
+  obtenerTotalMasculinos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Masculino').length;
+  }
 }
