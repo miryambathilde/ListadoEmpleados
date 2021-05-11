@@ -18,6 +18,9 @@ export class EmpleadoListComponent implements OnInit {
     {numeroEmpleado: 6, nombre: 'Sergio', apellidos: 'De Sousa', sexo:'Masculino', salario: 22000, moneda: '€'},
     {numeroEmpleado: 7, nombre: 'Luca', apellidos: 'De Sousa', sexo:'Masculino', salario: 17000, moneda: '€'},
   ]
+  /* variable de ngmodel que por defecto va a tener todos los sexos */
+  radioButtonSeleccionado = 'Todos';
+
   constructor() { }
 
   ngOnInit(): void {
