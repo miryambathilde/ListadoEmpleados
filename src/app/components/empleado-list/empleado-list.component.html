@@ -1,6 +1,8 @@
 <div class="container mt-4">
   <!-- renderizamos el componente hijo -->
-  <app-numero-empleados></app-numero-empleados>
+  <!-- INPUT [todos] que viene INPUT de la logica del hijo y tiene que coincidir el nombre exacto y le pasamos el metodo que tenemos en el padre:
+  obtenerTotalEmpleados() -->
+  <app-numero-empleados [todos]="obtenerTotalEmpleados()" [masculino]="obtenerTotalMasculinos()" [femenino]=" obtenerTotalFemeninos()"></app-numero-empleados>
   <div class="card mt-3">
     <div class="card-body">
       <table class="table">

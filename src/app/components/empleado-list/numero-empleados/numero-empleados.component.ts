@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+//IMPORTANCION COMPONENTE, INPUT DEL COMPONENTE HIJO//
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-numero-empleados',
@@ -6,10 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./numero-empleados.component.css']
 })
 export class NumeroEmpleadosComponent implements OnInit {
+  /* INPUT PARA COMUNICAR CON COMPONENTE PADRE */
+  @Input() todos!: number;
+  @Input() masculino!: number;
+  @Input() femenino!: number;
+
   /* ngmodel radioButtonSeleccionado */
   radioButtonSeleccionado = 'Todos';
 
-  constructor() { }
+  constructor() {
+    this.todos = 0;
+    this.masculino = 0;
+    this.femenino = 0;
+  }
 
   ngOnInit(): void {
   }
