@@ -27,12 +27,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Sergio</td>
-            <td>Perez</td>
-            <td>Masculino</td>
-            <td>15.000 €</td>
+          <!-- directiva ngFor para iterar la lista de empleados, por lo que queremos cada empleado de la array listEmpleados -->
+          <tr *ngFor="let empleado of listEmpleados">
+            <td>{{empleado.numeroEmpleado}}</td>
+            <td>{{empleado.nombre}}</td>
+            <td>{{empleado.apellidos}}</td>
+            <td>{{empleado.sexo}}</td>
+            <td>{{empleado.salario}} {{empleado.moneda}}</td>
           </tr>
         </tbody>
       </table>
