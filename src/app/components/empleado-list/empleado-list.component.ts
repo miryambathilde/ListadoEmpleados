@@ -44,4 +44,12 @@ export class EmpleadoListComponent implements OnInit {
   obtenerTotalMasculinos(): number {
     return this.listEmpleados.filter(list => list.sexo === 'Masculino').length;
   }
+
+  /* IMPORTAMOS EL METODO empleadoNumeroRadioButtonChange del componente hijo, le pasamos por parametro
+  radioButtonSelect que es de tipo y string y no devuelve nada */
+  empleadoNumeroRadioButtonChange(radioButtonSelect: string): void {
+    /* le pasamos radioButtonSeleccionado que es la variable declarada arriba para todos, y le ponemos como valor
+    lo que nos llege por el metodo con el parametro radioButtonSelect */
+    this.radioButtonSeleccionado = radioButtonSelect;
+  }
 }

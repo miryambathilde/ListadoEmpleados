@@ -1,8 +1,12 @@
 <div class="container mt-4">
   <!-- renderizamos el componente hijo -->
-  <!-- INPUT [todos] que viene INPUT de la logica del hijo y tiene que coincidir el nombre exacto y le pasamos el metodo que tenemos en el padre:
+  <!-- comunicacion de padre a hijo INPUT [todos] que viene INPUT de la logica del hijo y tiene que coincidir el nombre exacto y le pasamos el metodo que tenemos en el padre:
   obtenerTotalEmpleados() -->
-  <app-numero-empleados [todos]="obtenerTotalEmpleados()" [masculino]="obtenerTotalMasculinos()" [femenino]=" obtenerTotalFemeninos()"></app-numero-empleados>
+  <!-- AÑADIMOS (numeroRadioButtonChange)="empleadoNumeroRadioButtonChange($event)" PARA QUE EL COMPONENTE PADRE RECIBA LOS DEL COMPONENTE HIJO
+  le pasamos el primer nombre entre () tiene que coincidir exactamente con el nombre que tenemos en el output del hijo,
+el metodo que es lo que va despues le podemos poner el nombre que queramos ejecutar en el PADRE
+y el parametro ($event) es lo que pasa el usuario, es decir, todos, femenino o masculino -->
+  <app-numero-empleados [todos]="obtenerTotalEmpleados()" [masculino]="obtenerTotalMasculinos()" [femenino]=" obtenerTotalFemeninos()" (numeroRadioButtonChange)="empleadoNumeroRadioButtonChange($event)"></app-numero-empleados>
   <div class="card mt-3">
     <div class="card-body">
       <table class="table">

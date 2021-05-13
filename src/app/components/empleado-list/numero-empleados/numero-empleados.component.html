@@ -2,15 +2,18 @@
   <div class="card-body">
     <div class="form-check form-check-inline">
       <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
-      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos">
+      <!-- EN EL INPUT EJECUTAMOS EL INPUT A TRAVES DEL EVENT BINDING con el evento change y le pasamos el metodo radioChange-->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos" (change)="radioChange()">
       <label class="form-check-label" for="todos">Todos ({{todos}})</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino">
+      <!-- EN EL INPUT EJECUTAMOS EL INPUT A TRAVES DEL EVENT BINDING con el evento change y le pasamos el metodo radioChange-->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino" (change)="radioChange()">
       <label class="form-check-label" for="femenino">Femenino ({{femenino}})</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino">
+      <!-- EN EL INPUT EJECUTAMOS EL INPUT A TRAVES DEL EVENT BINDING con el evento change y le pasamos el metodo radioChange-->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino" (change)="radioChange()">
       <label class="form-check-label" for="masculino">Masculino ({{masculino}})</label>
     </div>
   </div>
