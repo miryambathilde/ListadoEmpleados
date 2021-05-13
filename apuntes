@@ -1,0 +1,694 @@
+APP LISTADO EMPLEADOS, COMUNICACION ENTRE COMPONENTES PADRE E HIJO ANGULAR 11 
+
+
+ng new ListadoEmpleados
+
+Open the folder you create with ng new and open the package.json file. In devDependencies change the version of "jasmine-core" 3.6.0 to 3.7.1 and "karma-jasmine-html-reporter" from 1.5.0 to 1.6.0 and save it. Then go back to Terminal and go to your project and run npm install. Now it works und you can run ng serve.
+
+ng serve --o
+
+añadimos boostrap a nuestro proyecto:
+
+https://getbootstrap.com/docs/4.6/getting-started/introduction/
+
+Ahora vamos a crear los componentes y luego haremos que se comuniquen los componentes padres con los componentes hijos:
+
+ng g c components/empleado-list
+ng g c components/empleado-list/numero-empleados
+
+renderizamos en src\app\app.component.html el componente empleado-list
+
+<app-empleado-list></app-empleado-list>
+
+Para agregar un fondo a nuestra aplicación nos vamos a uigradient:
+
+https://uigradients.com/#CalmDarya 
+
+elegimos el fondo que queremos y una vez elegido en <> conseguimos el css y lo copiamos, lo añadimos a los estilos globales:
+src\styles.css
+
+body {
+  background: #77A1D3;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #E684AE, #79CBCA, #77A1D3);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #E684AE, #79CBCA, #77A1D3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+Ahora añadimos cards en el componente empleado-list:
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      inputs
+    </div>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      tabla
+    </div>
+  </div>
+</div>
+
+Ahora vamos a boostrap y en forms buscamos los form check inline:
+https://getbootstrap.com/docs/4.6/components/forms/
+
+src\app\components\empleado-list\empleado-list.component.css
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexo" id="todos" value="Todos">
+        <label class="form-check-label" for="todos">Todos (5)</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexo" id="femenino" value="Femenino">
+        <label class="form-check-label" for="femenino">Femenino (3)</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexo" id="masculino" value="masculino">
+        <label class="form-check-label" for="masculino">Masculino (2)</label>
+      </div>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      tabla
+    </div>
+  </div>
+</div>
+
+
+Ahora vamos a por el input de la tabla, para ello nos vamos a boostrap content - tables:
+
+https://getbootstrap.com/docs/4.6/content/tables/
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="card mt-3">
+    <div class="card-body">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Numero Empleado</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Sexo</th>
+            <th>Sueldo Anual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Sergio</td>
+            <td>Perez</td>
+            <td>Masculino</td>
+            <td>15.000 €</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+Ahora vamos a crear el modelo de la clase empleado, por lo que creamos carpeta models y el archivo. Empleado.ts, y en src\app\models\Empleado.ts, creamos el modelo de la clase:
+
+//creamos el modelo de la clase empleado con los campos que tiene y definimos el tipo
+
+export class Empleado {
+  numeroEmpleado: number;
+  nombre: string;
+  apellidos: string;
+  sexo: string;
+  salario: number;
+  moneda: string;
+
+  //para iniciar esta clase tenemos que crear el constructor y le pasamos por parametros las varibles de las propiedades definidas:
+  constructor(numeroEmpleado: number, nombre: string, apellidos: string, sexo: string, salario: number) {
+    this.numeroEmpleado = numeroEmpleado;
+    this.nombre = nombre;
+    this.apellidos = apellidos;
+    this.sexo = sexo;
+    this.salario = salario;
+    this.moneda = '€';
+
+  }
+
+}
+
+Ahora queremos iterar un array en empleado-list.component para que la tabla sea dinámica:
+
+src\app\components\empleado-list\empleado-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+/* modelo de la clase empleado */
+import { Empleado } from 'src/app/models/Empleado';
+
+@Component({
+  selector: 'app-empleado-list',
+  templateUrl: './empleado-list.component.html',
+  styleUrls: ['./empleado-list.component.css']
+})
+export class EmpleadoListComponent implements OnInit {
+  /* iteramos el array de la variable listEmpleados donde iteramos el modelo de la clase Empleado y el array con las propiedades */
+  listEmpleados: Empleado [] = [
+    {numeroEmpleado: 1, nombre: 'Sergio', apellidos: 'Sánchez', sexo:'Masculino', salario: 15000, moneda: '€'},
+    {numeroEmpleado: 2, nombre: 'Miryam', apellidos: 'Bathilde', sexo:'Femenino', salario: 35000, moneda: '€'},
+    {numeroEmpleado: 3, nombre: 'Oliver', apellidos:'Crevillen', sexo:'Masculino', salario: 10000, moneda: '€'},
+    {numeroEmpleado: 4, nombre: 'Manuela', apellidos: 'Pérez', sexo:'Femenino', salario: 18000, moneda: '€'},
+    {numeroEmpleado: 5, nombre: 'Lola', apellidos: 'Lozano', sexo:'Femenino', salario: 20000, moneda: '€'},
+    {numeroEmpleado: 6, nombre: 'Sergio', apellidos: 'De Sousa', sexo:'Masculino', salario: 22000, moneda: '€'},
+    {numeroEmpleado: 7, nombre: 'Luca', apellidos: 'De Sousa', sexo:'Masculino', salario: 17000, moneda: '€'},
+  ]
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
+
+Ahora nos vamos a la vista para utilizar la directiva NgFor para iterar el array y hacer que la tabla sea dinamica:
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="card mt-3">
+    <div class="card-body">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Numero Empleado</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Sexo</th>
+            <th>Sueldo Anual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- directiva ngFor para iterar la lista de empleados, por lo que queremos cada empleado de la array listEmpleados -->
+          <tr *ngFor="let empleado of listEmpleados">
+            <td>{{empleado.numeroEmpleado}}</td>
+            <td>{{empleado.nombre}}</td>
+            <td>{{empleado.apellidos}}</td>
+            <td>{{empleado.sexo}}</td>
+            <td>{{empleado.salario}} {{empleado.moneda}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+GET TOTAL SEXO:
+
+Ahora queremos un método para filtrar por sexos:
+
+src\app\components\empleado-list\empleado-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+/* modelo de la clase empleado */
+import { Empleado } from 'src/app/models/Empleado';
+
+@Component({
+  selector: 'app-empleado-list',
+  templateUrl: './empleado-list.component.html',
+  styleUrls: ['./empleado-list.component.css']
+})
+export class EmpleadoListComponent implements OnInit {
+  /* iteramos el array de la variable listEmpleados donde iteramos el modelo de la clase Empleado y el array con las propiedades */
+  listEmpleados: Empleado [] = [
+    {numeroEmpleado: 1, nombre: 'Sergio', apellidos: 'Sánchez', sexo:'Masculino', salario: 15000, moneda: '€'},
+    {numeroEmpleado: 2, nombre: 'Miryam', apellidos: 'Bathilde', sexo:'Femenino', salario: 35000, moneda: '€'},
+    {numeroEmpleado: 3, nombre: 'Oliver', apellidos:'Crevillen', sexo:'Masculino', salario: 10000, moneda: '€'},
+    {numeroEmpleado: 4, nombre: 'Manuela', apellidos: 'Pérez', sexo:'Femenino', salario: 18000, moneda: '€'},
+    {numeroEmpleado: 5, nombre: 'Lola', apellidos: 'Lozano', sexo:'Femenino', salario: 20000, moneda: '€'},
+    {numeroEmpleado: 6, nombre: 'Sergio', apellidos: 'De Sousa', sexo:'Masculino', salario: 22000, moneda: '€'},
+    {numeroEmpleado: 7, nombre: 'Luca', apellidos: 'De Sousa', sexo:'Masculino', salario: 17000, moneda: '€'},
+  ]
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+ /* metodo para obtener el total de empleados que nos devuelve un number, y le decimos que devuelva la longitud de numeros del array de listEmpleados  */
+  obtenerTotalEmpleados(): number {
+    return this.listEmpleados.length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada por sexo
+  y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Femenino + el numero de empleados femeninos  */
+  obtenerTotalFemeninos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Femenino').length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada
+  por sexo y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Masculino + el numero de empleados femeninos  */
+  obtenerTotalMasculinos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Masculino').length;
+  }}
+
+Y ahora tenemos que poner este método en el input de la vista de los inputs sexo:
+
+div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexo" id="todos" value="Todos">
+        <label class="form-check-label" for="todos">Todos {{obtenerTotalEmpleados()}}</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexo" id="femenino" value="Femenino">
+        <label class="form-check-label" for="femenino">Femenino {{obtenerTotalFemeninos()}}</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexo" id="masculino" value="masculino">
+        <label class="form-check-label" for="masculino">Masculino {{obtenerTotalMasculinos()}}</label>
+      </div>
+    </div>
+  </div>
+
+
+FILTRO POR SEXO, METODO PARA FILTRO EN INPUT
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="form-check form-check-inline">
+        <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
+        <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos">
+        <label class="form-check-label" for="todos">Todos {{obtenerTotalEmpleados()}}</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino">
+        <label class="form-check-label" for="femenino">Femenino {{obtenerTotalFemeninos()}}</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="masculino">
+        <label class="form-check-label" for="masculino">Masculino {{obtenerTotalMasculinos()}}</label>
+      </div>
+    </div>
+  </div>
+
+Y ahora vamos a la logica para declarar la variable de ngModel:
+
+src\app\components\empleado-list\empleado-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+/* modelo de la clase empleado */
+import { Empleado } from 'src/app/models/Empleado';
+
+@Component({
+  selector: 'app-empleado-list',
+  templateUrl: './empleado-list.component.html',
+  styleUrls: ['./empleado-list.component.css']
+})
+export class EmpleadoListComponent implements OnInit {
+  /* iteramos el array de la variable listEmpleados donde iteramos el modelo de la clase Empleado y el array con las propiedades */
+  listEmpleados: Empleado [] = [
+    {numeroEmpleado: 1, nombre: 'Sergio', apellidos: 'Sánchez', sexo:'Masculino', salario: 15000, moneda: '€'},
+    {numeroEmpleado: 2, nombre: 'Miryam', apellidos: 'Bathilde', sexo:'Femenino', salario: 35000, moneda: '€'},
+    {numeroEmpleado: 3, nombre: 'Oliver', apellidos:'Crevillen', sexo:'Masculino', salario: 10000, moneda: '€'},
+    {numeroEmpleado: 4, nombre: 'Manuela', apellidos: 'Pérez', sexo:'Femenino', salario: 18000, moneda: '€'},
+    {numeroEmpleado: 5, nombre: 'Lola', apellidos: 'Lozano', sexo:'Femenino', salario: 20000, moneda: '€'},
+    {numeroEmpleado: 6, nombre: 'Sergio', apellidos: 'De Sousa', sexo:'Masculino', salario: 22000, moneda: '€'},
+    {numeroEmpleado: 7, nombre: 'Luca', apellidos: 'De Sousa', sexo:'Masculino', salario: 17000, moneda: '€'},
+  ]
+  /* variable de ngmodel que por defecto va a tener todos los sexos */
+  radioButtonSeleccionado = 'Todos';
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  /* metodo para obtener el total de empleados que nos devuelve un number, y le decimos que devuelva la longitud de numeros del array de listEmpleados  */
+  obtenerTotalEmpleados(): number {
+    return this.listEmpleados.length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada por sexo
+  y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Femenino + el numero de empleados femeninos  */
+  obtenerTotalFemeninos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Femenino').length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINPOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada
+  por sexo y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Masculino + el numero de empleados femeninos  */
+  obtenerTotalMasculinos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Masculino').length;
+  }
+}
+
+Para poder usar esta directiva tenemos que importar el FormsModule en src\app\app.module.ts:
+
+import { NgModule } from '@angular/core';
+/* FORMS MODULE PARA DIRECTIVA NG MODEL */
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+// COMPONENTES//
+import { AppComponent } from './app.component';
+import { EmpleadoListComponent } from './components/empleado-list/empleado-list.component';
+import { NumeroEmpleadosComponent } from './components/empleado-list/numero-empleados/numero-empleados.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    EmpleadoListComponent,
+    NumeroEmpleadosComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+AHORA QUEREMOS QUE EL FILTRO DE LA TABLA SE REALICE CORRECTAMENTE, ya que por defecto tiene todos al iniciar la aplicación:
+
+Como no podemos usar un ngFor y un ngIf en la misma clase a la vez, usamos en ng-container (clase de angular)
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="form-check form-check-inline">
+        <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
+        <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos">
+        <label class="form-check-label" for="todos">Todos {{obtenerTotalEmpleados()}}</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino">
+        <label class="form-check-label" for="femenino">Femenino {{obtenerTotalFemeninos()}}</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino">
+        <label class="form-check-label" for="masculino">Masculino {{obtenerTotalMasculinos()}}</label>
+      </div>
+    </div>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Numero Empleado</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Sexo</th>
+            <th>Sueldo Anual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- directiva ngFor para iterar la lista de empleados, por lo que queremos cada empleado de la array listEmpleados -->
+          <ng-container *ngFor="let empleado of listEmpleados">
+            <tr *ngIf="radioButtonSeleccionado == 'Todos' || radioButtonSeleccionado == empleado.sexo">
+              <td>{{empleado.numeroEmpleado}}</td>
+              <td>{{empleado.nombre}}</td>
+              <td>{{empleado.apellidos}}</td>
+              <td>{{empleado.sexo}}</td>
+              <td>{{empleado.salario}} {{empleado.moneda}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+COMO EL CODIGO DEL COMPONENT EMPLEADO LIST SE ESTA HACIENDO MUY LARGO, VAMOS A REFACTORIZAR NUESTRO CÓDIGO EN MÁS COMPONENTES Y VAMOS A HACER QUE SE COMUNIQUEN ENTRE ELLOS:
+
+INPUT - PASA LOS DATOS DEL COMPONENTE PADRE AL COMPONENTE HIJO
+
+Vamos a poner el primer input en el componente hijo numero-empleados:
+
+src\app\components\empleado-list\numero-empleados\numero-empleados.component.html
+
+<div class="card">
+  <div class="card-body">
+    <div class="form-check form-check-inline">
+      <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos">
+      <label class="form-check-label" for="todos">Todos {{}</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino">
+      <label class="form-check-label" for="femenino">Femenino {{}}</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino">
+      <label class="form-check-label" for="masculino">Masculino {{}}</label>
+    </div>
+  </div>
+</div>
+
+y tambien pasamos el css del componente padre al componente hijo.
+
+Ahora tenemos que pasar el ngmodel al componente hijo y lo mantenemos tambien en el padre:
+
+src\app\components\empleado-list\numero-empleados\numero-empleados.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-numero-empleados',
+  templateUrl: './numero-empleados.component.html',
+  styleUrls: ['./numero-empleados.component.css']
+})
+export class NumeroEmpleadosComponent implements OnInit {
+  /* ngmodel radioButtonSeleccionado */
+  radioButtonSeleccionado = 'Todos';
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
+
+y renderizamos en la vista del componente padre el componente hijo:
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="container mt-4">
+  <app-numero-empleados></app-numero-empleados>
+
+Ahora tenemos que hacer que se comunique el componente PADRE con el componente HIJO para que funciones correctamente el FILTRADO // @Input
+
+https://angular.io/guide/inputs-outputs
+
+src\app\components\empleado-list\numero-empleados\numero-empleados.component.ts
+
+//IMPORTANCION COMPONENTE, INPUT DEL COMPONENTE HIJO//
+import { Component, Input, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-numero-empleados',
+  templateUrl: './numero-empleados.component.html',
+  styleUrls: ['./numero-empleados.component.css']
+})
+export class NumeroEmpleadosComponent implements OnInit {
+  /* INPUT PARA COMUNICAR CON COMPONENTE PADRE */
+  @Input() todos!: number;
+  @Input() masculino!: number;
+  @Input() femenino!: number;
+
+  /* ngmodel radioButtonSeleccionado */
+  radioButtonSeleccionado = 'Todos';
+
+  constructor() {
+    this.todos = 0;
+    this.masculino = 0;
+    this.femenino = 0;
+  }
+
+  ngOnInit(): void {
+  }
+
+}
+
+e interpoalmos el input todos en la vista del componente hijo:
+
+src\app\components\empleado-list\numero-empleados\numero-empleados.component.html
+
+<div class="card">
+  <div class="card-body">
+    <div class="form-check form-check-inline">
+      <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos">
+      <label class="form-check-label" for="todos">Todos ({{todos}})</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino">
+      <label class="form-check-label" for="femenino">Femenino ({{femenino}})</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino">
+      <label class="form-check-label" for="masculino">Masculino ({{masculino}})</label>
+    </div>
+  </div>
+</div>
+
+
+Y por último se lo pasamos al componente padre en la vista:
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="container mt-4">
+  <!-- renderizamos el componente hijo -->
+  <!-- INPUT [todos] que viene INPUT de la logica del hijo y tiene que coincidir el nombre exacto y le pasamos el metodo que tenemos en el padre:
+  obtenerTotalEmpleados() -->
+  <app-numero-empleados [todos]="obtenerTotalEmpleados()" [masculino]="obtenerTotalMasculinos()" [femenino]=" obtenerTotalFemeninos()"></app-numero-empleados>
+
+
+Ahora tenemos que hacer que se comunique el componente HIJO con el componente PADRE para que funciones correctamente el FILTRADO // @Output, el decorado Output es de tipo EventEmitter
+
+https://angular.io/guide/inputs-outputs
+
+nos vamos al componente hijo y hacemos el output
+src\app\components\empleado-list\numero-empleados\numero-empleados.component.ts
+
+//IMPORTANCION COMPONENTE, INPUT PARA EL COMPONENTE HIJO, OUTPUT PARA EL COMPONENTE PADRE + EVENTEMITTER//
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-numero-empleados',
+  templateUrl: './numero-empleados.component.html',
+  styleUrls: ['./numero-empleados.component.css']
+})
+export class NumeroEmpleadosComponent implements OnInit {
+  /* INPUT PARA COMUNICAR COMPONENTE PADRE CON COMPONENTE HIJO */
+  @Input() todos!: number;
+  @Input() masculino!: number;
+  @Input() femenino!: number;
+  /* OUTPUT PARA COMUNICAR COMPONENTE HIJO CON COMPONENTE PADRE */
+  @Output() numeroRadioButtonChange = new EventEmitter<string>();
+
+
+  /* ngmodel radioButtonSeleccionado */
+  radioButtonSeleccionado = 'Todos';
+
+  constructor() {
+    this.todos = 0;
+    this.masculino = 0;
+    this.femenino = 0;
+  }
+
+  ngOnInit(): void {
+  }
+  /* metodo del output https://angular.io/guide/inputs-outputs  que no devuelve nada*/
+  /* le pasamos el string del output + el evento emit y al evento emit le pasamos el radioButtonSeleccionado */
+  radioChange(): void {
+    this.numeroRadioButtonChange.emit(this.radioButtonSeleccionado);
+  }
+
+}
+
+
+Ahora vamos al html del componente hijo:
+
+src\app\components\empleado-list\numero-empleados\numero-empleados.component.html
+
+<div class="card">
+  <div class="card-body">
+    <div class="form-check form-check-inline">
+      <!-- DIRECTIVA NG MODEL PARA EL FILTRO POR SEXO -->
+      <!-- EN EL INPUT EJECUTAMOS EL INPUT A TRAVES DEL EVENT BINDING con el evento change y le pasamos el metodo radioChange-->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="todos" value="Todos" (change)="radioChange()">
+      <label class="form-check-label" for="todos">Todos ({{todos}})</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <!-- EN EL INPUT EJECUTAMOS EL INPUT A TRAVES DEL EVENT BINDING con el evento change y le pasamos el metodo radioChange-->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="femenino" value="Femenino" (change)="radioChange()">
+      <label class="form-check-label" for="femenino">Femenino ({{femenino}})</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <!-- EN EL INPUT EJECUTAMOS EL INPUT A TRAVES DEL EVENT BINDING con el evento change y le pasamos el metodo radioChange-->
+      <input class="form-check-input" [(ngModel)]="radioButtonSeleccionado" type="radio" name="sexo" id="masculino" value="Masculino" (change)="radioChange()">
+      <label class="form-check-label" for="masculino">Masculino ({{masculino}})</label>
+    </div>
+  </div>
+</div>
+
+
+Ahora tenemos que configurar el componente PADRE para que reciba los datos del hijo:
+
+Nos vamos al html del componente padre 
+
+src\app\components\empleado-list\empleado-list.component.html
+
+<div class="container mt-4">
+  <!-- renderizamos el componente hijo -->
+  <!-- comunicacion de padre a hijo INPUT [todos] que viene INPUT de la logica del hijo y tiene que coincidir el nombre exacto y le pasamos el metodo que tenemos en el padre:
+  obtenerTotalEmpleados() -->
+  <!-- AÑADIMOS (numeroRadioButtonChange)="empleadoNumeroRadioButtonChange($event)" PARA QUE EL COMPONENTE PADRE RECIBA LOS DEL COMPONENTE HIJO
+  le pasamos el primer nombre entre () tiene que coincidir exactamente con el nombre que tenemos en el output del hijo,
+el metodo que es lo que va despues le podemos poner el nombre que queramos ejecutar en el PADRE
+y el parametro ($event) es lo que pasa el usuario, es decir, todos, femenino o masculino -->
+  <app-numero-empleados [todos]="obtenerTotalEmpleados()" [masculino]="obtenerTotalMasculinos()" [femenino]=" obtenerTotalFemeninos()" (numeroRadioButtonChange)="empleadoNumeroRadioButtonChange($event)"></app-numero-empleados>
+
+Y ahora nos vamos a la logica del componente padre para importar ese metodo:
+
+src\app\components\empleado-list\empleado-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+/* modelo de la clase empleado */
+import { Empleado } from 'src/app/models/Empleado';
+
+@Component({
+  selector: 'app-empleado-list',
+  templateUrl: './empleado-list.component.html',
+  styleUrls: ['./empleado-list.component.css']
+})
+export class EmpleadoListComponent implements OnInit {
+  /* iteramos el array de la variable listEmpleados donde iteramos el modelo de la clase Empleado y el array con las propiedades */
+  listEmpleados: Empleado [] = [
+    {numeroEmpleado: 1, nombre: 'Sergio', apellidos: 'Sánchez', sexo:'Masculino', salario: 15000, moneda: '€'},
+    {numeroEmpleado: 2, nombre: 'Miryam', apellidos: 'Bathilde', sexo:'Femenino', salario: 35000, moneda: '€'},
+    {numeroEmpleado: 3, nombre: 'Oliver', apellidos:'Crevillen', sexo:'Masculino', salario: 10000, moneda: '€'},
+    {numeroEmpleado: 4, nombre: 'Manuela', apellidos: 'Pérez', sexo:'Femenino', salario: 18000, moneda: '€'},
+    {numeroEmpleado: 5, nombre: 'Lola', apellidos: 'Lozano', sexo:'Femenino', salario: 20000, moneda: '€'},
+    {numeroEmpleado: 6, nombre: 'Sergio', apellidos: 'De Sousa', sexo:'Masculino', salario: 22000, moneda: '€'},
+    {numeroEmpleado: 7, nombre: 'Luca', apellidos: 'De Sousa', sexo:'Masculino', salario: 17000, moneda: '€'},
+  ]
+  /* variable de ngmodel que por defecto va a tener todos los sexos */
+  radioButtonSeleccionado = 'Todos';
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  /* metodo para obtener el total de empleados que nos devuelve un number, y le decimos que devuelva la longitud de numeros del array de listEmpleados  */
+  obtenerTotalEmpleados(): number {
+    return this.listEmpleados.length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada por sexo
+  y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Femenino + el numero de empleados femeninos  */
+  obtenerTotalFemeninos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Femenino').length;
+  }
+
+  /* metodo para obtener el total de empleados FEMENINPOS que nos devuelve un number, y le decimos que devuelva la lista de empleados filtrada
+  por sexo y pasamos por parametro
+  el arrow function en donde dentro de list el sexo sea exactamente igual a Masculino + el numero de empleados femeninos  */
+  obtenerTotalMasculinos(): number {
+    return this.listEmpleados.filter(list => list.sexo === 'Masculino').length;
+  }
+
+  /* IMPORTAMOS EL METODO empleadoNumeroRadioButtonChange del componente hijo, le pasamos por parametro
+  radioButtonSelect que es de tipo y string y no devuelve nada */
+  empleadoNumeroRadioButtonChange(radioButtonSelect: string): void {
+    /* le pasamos radioButtonSeleccionado que es la variable declarada arriba para todos, y le ponemos como valor
+    lo que nos llege por el metodo con el parametro radioButtonSelect */
+    this.radioButtonSeleccionado = radioButtonSelect;
+  }
+}
+
